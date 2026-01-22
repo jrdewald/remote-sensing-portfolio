@@ -1,3 +1,4 @@
+
 # remote-sensing-portfolio
 
 This repository contains selected examples of my work in remote sensing, geospatial analysis, and data engineering for environmental applications.
@@ -8,7 +9,7 @@ Brief descriptions of the different coding files in this example repository:
 
   1. BiodivMap_Miami.R
      
-  This code works create a biodiversity map of Miami-Dade countyby using the biodivmap R library.The biodiversity map relies on the assumption that areas with greater amounts of spectral diversity are a proxy for biodiversity. In this code the user downloads and unzips a particular Sentinel-2 image and then masks out areas of no vegetation using NDVI, Blue, and NIR thresholds. It then creates the nessecary indices from the sentinel 2 data before performing the "biodivMapR_full()" function to create the final biodiversity map.
+  This code works create a biodiversity map of Miami-Dade county by using the biodivmap R library.The biodiversity map relies on the assumption that areas with greater amounts of spectral diversity are a proxy for biodiversity. In this code the user downloads and unzips a particular Sentinel-2 image and then masks out areas of no vegetation using NDVI, Blue, and NIR thresholds. It then creates the nessecary indices from the sentinel 2 data before performing the "biodivMapR_full()" function to create the final biodiversity map.
 
 2. Connect Geocode to NDVI data (Miami).R
    
@@ -22,6 +23,8 @@ Brief descriptions of the different coding files in this example repository:
 
   This script preprocesses Landsat 8 summer NDVI layers by scaling reflectance values, spatially masking to a study extent, removing all areas that are identified as clouds from a previous Fmask output before generating the final yearly maximum NDVI composites.
 
-5. 
+5. GEE code for downloading Sentinel 2 data for RSI calculation
+
+  This Google Earth Engine Script works to create and download the nessecary Sentinel-2 indices required for the RSEI code in item #3.
 
 
