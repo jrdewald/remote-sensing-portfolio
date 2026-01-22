@@ -1,5 +1,9 @@
 # =========================================================
 #   RSEI Calculation Script (Normalized PCA Method)
+# Author: Julius R. Dewald
+# This code works to create the Remotely Sensed Ecological Index as created by Xu (2013)
+# It relies on three Sentinel-2 derived indices and a Landsat 8 thermal map for the same date
+# The code takes these data and performs a PCA analysis to create the index
 # =========================================================
 
 library(terra)   # raster handling
@@ -96,4 +100,5 @@ library(sf)      # shapefile handling
 			  overwrite = TRUE,
 			  gdal = c("COMPRESS=LZW")
 			)
+
 
