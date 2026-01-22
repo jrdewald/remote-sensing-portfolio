@@ -1,6 +1,6 @@
 ###############################################################################
 # Sentinel-2 Biodiversity Mapping Pipeline
-#
+# Author: Julius R. Dewald
 # Description:
 # This script demonstrates a remote sensing workflow that downloads Sentinel-2
 # Level-2A surface reflectance data to derive vegetation masks, spectral features,
@@ -189,3 +189,4 @@ biodiv_results <- biodivMapR_full(
 # =============================
 # End of pipeline
 # =============================
+
