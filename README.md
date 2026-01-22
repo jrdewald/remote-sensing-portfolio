@@ -1,26 +1,60 @@
+# Remote Sensing & Geospatial Data Engineering Portfolio
 
-# remote-sensing-portfolio
+This repository contains selected examples of my work in remote sensing, geospatial analysis, and geospatial data engineering for environmental applications.
 
-This repository contains selected examples of my work in remote sensing, geospatial analysis, and data engineering for environmental applications.
+My background is in applied environmental science and remote sensing, with experience building reproducible and scalable workflows for processing large satellite and raster datasets (e.g., Landsat and Sentinel). My work includes generating NDVI composites, quantifying changes in greenness over time, integrating spatial and longitudinal datasets, and developing cloud-based and local geospatial pipelines using R and Google Earth Engine.
 
-My background is in applied environmental science and remote sensing, with experience building reproducible workflows for processing large satellite and raster datasets (e.g., Landsat, Sentinel), developing NDVI composites, measuring changes in greenness over time, and scalable geospatial pipelines using R, and Google Earth Engine.
+Each script in this repository is designed to demonstrate specific technical and analytical capabilities.
 
-Brief descriptions of the different coding files in this example repository:
+---
 
-1. Connect Geocode to NDVI data (Miami).R
-   
-  This code was used for a study that attempted to see how changes in greenness in a participant's life might result in changes to their overall health. Address histories were available for all participants, documenting relocations across the study period. NDVI values were assigned based on Federal Information Processing Standards (FIPS) codes. A singular NDVI value per participant per season per year was assigned by the code. For participants relocating during a season, a weighted average of NDVI values from previous and current locations was computed, reflecting exposure duration. To assess overall environmental exposure, the total study inclusion days for each participant were calculated. Subsequently, the average and cumulative NDVI values across the study duration were determined by the code, providing insights into long-term exposure levels
+## Code Examples
 
-2. RSEI Calculation Script (Normalized PCA Method).R
+### 1. NDVI Temporal Attribution Pipeline (Miami)
+**File:** `Connect_Geocode_to_NDVI_data_Miami.R`
 
-  This code uses indices derived from Sentinel-2 and Landsat 8 data to create a Remotely Sensed Ecological Index (RSEI) for Miami-Dade County. This technique uses a Principle Component Analysis (PCA) to create the index.  The Sentinel-2 data was created by the GEE code in item #5.
+This script demonstrates a workflow for linking remotely sensed NDVI data to longitudinal residential address histories. Participant relocation events are expanded temporally, and NDVI values are assigned based on spatial units (FIPS codes) for each season and year.
 
-3. Composite_Code_Landsat_8.R
+Key features include:
+- Temporal expansion of residence intervals
+- Partial-season weighting for participants who relocate during a season
+- Assignment of seasonal NDVI exposure per participant
+- Calculation of average and cumulative NDVI exposure across the study period
 
-  This script preprocesses Landsat 8 summer NDVI layers by scaling reflectance values, spatially masking to a study extent, removing all areas that are identified as clouds from a previous Fmask output before generating the final yearly maximum NDVI composites.
+This approach enables the assessment of long-term environmental exposure while accounting for residential mobility.
 
-4. GEE code for downloading Sentinel 2 data for RSI calculation
+---
 
-  This Google Earth Engine Script works to create and download the nessecary Sentinel-2 indices required for the RSEI code in item #2.
+### 2. Remotely Sensed Ecological Index (RSEI) Calculation
+**File:** `RSEI_Calculation_Normalized_PCA.R`
 
+This script calculates a Remotely Sensed Ecological Index (RSEI) for Miami-Dade County using indices derived from Sentinel-2 and Landsat 8 imagery. The index is generated using a normalized Principal Component Analysis (PCA) approach to integrate multiple environmental indicators into a single composite metric.
 
+Sentinel-2 indices used in this workflow are generated using the Google Earth Engine script described below.
+
+---
+
+### 3. Landsat 8 Summer NDVI Composites
+**File:** `Composite_Code_Landsat_8.R`
+
+This script preprocesses Landsat 8 summer NDVI layers by:
+- Scaling reflectance values
+- Spatially masking data to a defined study extent
+- Removing cloud-contaminated pixels using Fmask outputs
+- Generating yearly maximum NDVI composites
+
+The workflow is designed for batch processing and reproducible generation of long-term NDVI time series.
+
+---
+
+### 4. Google Earth Engine: Sentinel-2 Index Generation
+**File:** `Sentinel2_RSEI_GEE.js`
+
+This Google Earth Engine script generates and exports Sentinel-2 spectral indices required for the RSEI calculation. The script demonstrates cloud masking, index calculation, and preparation of analysis-ready outputs for downstream processing in R.
+
+---
+
+## Notes
+- All scripts have been anonymized and refactored for public sharing.
+- Human-subject data, proprietary datasets, and restricted assets have been removed.
+- Example workflows are representative of methods used in peer-reviewed research and applied environmental analyses.
