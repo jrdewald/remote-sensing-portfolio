@@ -1,0 +1,98 @@
+// =====================
+// 1. Define study area
+// USER MUST PROVIDE STUDY AREA AS AN ASSET OR DRAWN GEOMETRY
+// =====================
+var Miami = ee.FeatureCollection('--');
+
+// =====================
+// 2. Load Sentinel-2 SR
+// =====================
+var s2 = ee.ImageCollection("COPERNICUS/S2")
+  .filterBounds(Miami.geometry())
+  .filterDate('2018-12-21', '2018-12-23')
+  .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 10))
+  .map(function(img){
+    return img.divide(10000)
+      .copyProperties(img, img.propertyNames());
+  });
+
+// Create a median composite (for clean mosaic)
+var s2_med = s2.median().clip(Miami);
+
+// =====================
+// 3. Compute NDVI
+// =====================
+// NDVI = (NIR - RED) / (NIR + RED)
+var ndvi = s2_med.normalizedDifference(['B8', 'B4']).rename('NDVI');
+
+// =====================
+// 4. Compute NDSI
+// =====================
+// NDSI = (GREEN - SWIR1) / (GREEN + SWIR1)
+var ndsi = s2_med.normalizedDifference(['B3', 'B11']).rename('NDSI');
+
+// =====================
+// 5. Compute Tasseled Cap Wetness (TCW)
+// =====================
+// Using coefficients from Crist (1985) adapted for Sentinel-2 (Baig et al. 2014)
+// Bands order: B2 (Blue), B3 (Green), B4 (Red), B8 (NIR), B11 (SWIR1), B12 (SWIR2)
+var wetness = s2_med.expression(
+  '0.0649*B1 + 0.1363*B2 + 0.2802*B3 + 0.3072*B4 + ' +
+  '0.5288*B5 + 0.1379*B6 - 0.0001*B7 - 0.0807*B8 - ' +
+  '0.1389*B8A - 0.0302*B9 + 0.0003*B10 - 0.4064*B11 - 0.5602*B12', {
+    'B1': s2_med.select('B1'),
+    'B2': s2_med.select('B2'),
+    'B3': s2_med.select('B3'),
+    'B4': s2_med.select('B4'),
+    'B5': s2_med.select('B5'),
+    'B6': s2_med.select('B6'),
+    'B7': s2_med.select('B7'),
+    'B8': s2_med.select('B8'),
+    'B8A': s2_med.select('B8A'),
+    'B9': s2_med.select('B9'),
+    'B10': s2_med.select('B10'),
+    'B11': s2_med.select('B11'),
+    'B12': s2_med.select('B12')
+  }).rename('Wetness');
+
+// =====================
+// 6. Visualization
+// =====================
+Map.centerObject(Miami, 10);
+Map.addLayer(ndvi, {min:0, max:1, palette:['brown','yellow','green']}, 'NDVI');
+Map.addLayer(ndsi, {min:-1, max:1, palette:['blue','white','orange']}, 'NDSI');
+Map.addLayer(wetness, {min:-0.2, max:0.2, palette:['brown','white','blue']}, 'Wetness');
+Map.addLayer(evi, {min: -1, max: 1, palette: ['red','yellow','green']}, 'EVI');
+// =====================
+// 7. Export each variable separately
+// =====================
+
+// NDVI
+Export.image.toDrive({
+  image: ndvi,
+  description: 'MiamiDade_S2_TOA_NDVI',
+  folder: 'GEE_exports',    // optional folder name
+  region: Miami.geometry(),
+  scale: 10,
+  maxPixels: 1e13
+});
+
+// NDSI
+Export.image.toDrive({
+  image: ndsi,
+  description: 'MiamiDade_S2_TOA_NDSI',
+  folder: 'GEE_exports',
+  region: Miami.geometry(),
+  scale: 10,
+  maxPixels: 1e13
+});
+
+// Wetness
+Export.image.toDrive({
+  image: wetness,
+  description: 'MiamiDade_S2_TOA_Wetness',
+  folder: 'GEE_exports',
+  region: Miami.geometry(),
+  scale: 10,
+  maxPixels: 1e13
+});
