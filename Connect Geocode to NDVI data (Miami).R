@@ -1,7 +1,7 @@
 
 ###############################################################################
 # NDVI Temporal Attribution Pipeline
-#
+# Author: Julius R. Dewald
 # Description:
 # This script demonstrates a geospatial data engineering workflow for linking
 # remotely sensed NDVI data to longitudinal location histories and aggregating
@@ -390,3 +390,4 @@ library(ggplot2)
 		  group_by(ID) %>%
 		  summarise(example=any(TIME=="2019-1"))
 		ggplot(example, aes(x=TIME, y=NDVI, group=ID, color=ID)) + geom_line()+xlab("Year")+ylab("NDVI")+ylim(0,1)
+
